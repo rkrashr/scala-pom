@@ -1,158 +1,157 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ds-model</groupId>
-	<artifactId>ds-model</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ds-model</groupId>
+  <artifactId>ds-model</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
 	<properties>
-		<encoding>UTF-8</encoding>
-		<scala.version>2.11.6</scala.version>
-	</properties>
+    <encoding>UTF-8</encoding>
+    <scala.version>2.11.6</scala.version>
+  </properties>
 
-	<build>
-
-		<sourceDirectory>src/main/scala</sourceDirectory>
-
-		<plugins>
-			<plugin>
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>scala-maven-plugin</artifactId>
-				<version>4.0.1</version>
-				<configuration>
-					<sourceDir>src/main/scala</sourceDir>
-				</configuration>
+  <build>
+  
+  	<sourceDirectory>src/main/scala</sourceDirectory>
+  
+    <plugins>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>4.0.1</version>
+        <configuration>
+        <sourceDir>src/main/scala</sourceDir>
+        </configuration>
 				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>        
+      </plugin>
 
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      
+<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-shade-plugin</artifactId>
+			  <version>2.3</version>
+			  <executions>
+			    <execution>
+			      <phase>package</phase>
+			      <goals>
+			        <goal>shade</goal>
+			      </goals>
+			      <configuration>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
+					    <filters>
+					        <filter>
+					            <artifact>*:*</artifact>
+					            <excludes>
+					                <exclude>META-INF/*.SF</exclude>
+					                <exclude>META-INF/*.DSA</exclude>
+					                <exclude>META-INF/*.RSA</exclude>
+					            </excludes>
+					        </filter>
+					    </filters>
+			      
+			        <transformers>
+			          <transformer
+			            implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+			            <manifestEntries>
+			              <Main-Class>Breeze1</Main-Class>
+			            </manifestEntries>
+			          </transformer>
+			        </transformers>
+			        <artifactSet/>
+			        <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+			      </configuration>
+			    </execution>
+			  </executions>
+			</plugin>   
+      
+      
+    </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>net.alchim31.maven</groupId>
+    								<artifactId>scala-maven-plugin</artifactId>
+    								<versionRange>[4.0.1,)</versionRange>
+    								<goals>
+    									<goal>compile</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+		    					<action>
+			               <execute>
+			                 <runOnIncremental>false</runOnIncremental>
+			               </execute >
+			             </action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
+  </build>
+  <dependencies>
+  	
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
 
-							<filters>
-								<filter>
-									<artifact>*:*</artifact>
-									<excludes>
-										<exclude>META-INF/*.SF</exclude>
-										<exclude>META-INF/*.DSA</exclude>
-										<exclude>META-INF/*.RSA</exclude>
-									</excludes>
-								</filter>
-							</filters>
-
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<manifestEntries>
-										<Main-Class>Breeze1</Main-Class>
-									</manifestEntries>
-								</transformer>
-							</transformers>
-							<artifactSet />
-							<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+		  	
+<!-- https://mvnrepository.com/artifact/org.scalanlp/breeze -->
+<dependency>
+    <groupId>org.scalanlp</groupId>
+    <artifactId>breeze_2.11</artifactId>
+    <version>0.13.2</version>
+</dependency>
 
 
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>net.alchim31.maven</groupId>
-										<artifactId>scala-maven-plugin</artifactId>
-										<versionRange>[4.0.1,)</versionRange>
-										<goals>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute>
-											<runOnIncremental>false</runOnIncremental>
-										</execute>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-	<dependencies>
-
+  	
 		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>${scala.version}</version>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-simple</artifactId>
+		  <version>1.7.5</version>
 		</dependency>
+  
+<!-- https://mvnrepository.com/artifact/org.plotly-scala/plotly-core -->
+<dependency>
+    <groupId>org.plotly-scala</groupId>
+    <artifactId>plotly-core_2.11</artifactId>
+    <version>0.5.4</version>
+</dependency>
 
+  	
+  	<!-- https://mvnrepository.com/artifact/com.quantifind/wisp -->
+<dependency>
+    <groupId>com.quantifind</groupId>
+    <artifactId>wisp_2.11</artifactId>
+    <version>0.0.4</version>
+</dependency>
+  	
+  </dependencies>
+  
 
-		<!-- https://mvnrepository.com/artifact/org.scalanlp/breeze -->
-		<dependency>
-			<groupId>org.scalanlp</groupId>
-			<artifactId>breeze_2.12</artifactId>
-			<version>0.13.2</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.5</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.plotly-scala/plotly-core -->
-		<dependency>
-			<groupId>org.plotly-scala</groupId>
-			<artifactId>plotly-core_2.12</artifactId>
-			<version>0.5.4</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.quantifind/wisp -->
-		<dependency>
-			<groupId>com.quantifind</groupId>
-			<artifactId>wisp_2.11</artifactId>
-			<version>0.0.4</version>
-		</dependency>
-
-	</dependencies>
-
-
-
+  
 </project>
